@@ -1,7 +1,7 @@
 {{ 
     config(
     materialized='incremental',
-    unique_id=['DATE_ID','ORGANIZATION_ID'],
+    unique_id=['DATE_ID','ORGANIZATION_ID', 'INVOICE_ID'],
 ) 
 }}
 
@@ -41,6 +41,7 @@ SELECT
     di.FX_RATE_PAYMENT,
     di.CREATED_AT,
     di.VALUE_USD,
+    SUM(VALUE_USD) OVER (PARTITION BY di.DATE_ID, di.ORGANIZATION_ID) AS TRANSACTION_VALUE_BY_DATE,
     di._incremental_sequence AS _sequence,
     CURRENT_TIMESTAMP()      AS _incremental_sequence
 FROM

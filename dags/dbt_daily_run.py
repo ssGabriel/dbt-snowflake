@@ -6,11 +6,12 @@ from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig
 from cosmos.profiles import SnowflakeUserPasswordProfileMapping
 from cosmos.config import ExecutionConfig
 from pathlib import Path
+from airflow.utils.dates import days_ago
 
 
 default_args = {
     "owner": "airflow",
-    "start_date": datetime(2022, 1, 1),
+    'start_date': days_ago(1),
     "retries": 1,
 }
 
@@ -38,14 +39,7 @@ execution_config = ExecutionConfig(
     dbt_executable_path=DBT_PATH,
 )
 
-slack_report = SnowflakeToSlackOperator(
-    task_id="slack_report",
-    sql=SNOWFLAKE_SLACK_SQL,
-    slack_message=SNOWFLAKE_SLACK_MESSAGE,
-    snowflake_conn_id=SNOWFLAKE_CONN_ID,
-    slack_conn_id=SLACK_CONN_ID,
-    dag=dag,
-)
+
 
 dag = DAG(
     "snowflake_dbt",
@@ -67,4 +61,4 @@ dbt_running_models = DbtTaskGroup(
 
 end_dag = DummyOperator(task_id="end_dag", dag=dag)
 
-start_dag >> dbt_running_models >> slack_report >>end_dag
+start_dag >> dbt_running_models >> end_dag
