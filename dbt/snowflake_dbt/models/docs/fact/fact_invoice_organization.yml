@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: fact_invoice_organization 
+    description: "Fact table incremental model that combines data from dim_date, dim_invoices, and dim_organizations."
+
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('dim_invoices')    
+
+    columns:
+      - name: DATE_ID
+        description: "The date identifier."
+      - name: DAY_OF_WEEK
+        description: "The day of the week (e.g., 1 for Monday)."
+      - name: DAY_NAME
+        description: "The name of the day (e.g., Monday)."
+      - name: QUARTER
+        description: "The quarter of the year (e.g., 1 for Q1)."
+      - name: MONTH
+        description: "The month of the year (e.g., 1 for January)."
+      - name: YEAR
+        description: "The year."
+      - name: QUARTER_END_DATE
+        description: "The end date of the quarter."
+      - name: MONTH_END_DATE
+        description: "The end date of the month."
+      - name: ORGANIZATION_ID
+        description: "The organization identifier."
+      - name: FIRST_PAYMENT_DATE
+        description: "The first payment date for the organization."
+      - name: LAST_PAYMENT_DATE
+        description: "The last payment date for the organization."
+      - name: LEGAL_ENTITY_COUNTRY_CODE
+        description: "The country code of the legal entity."
+      - name: COUNT_TOTAL_CONTRACTS_ACTIVE
+        description: "The count of active contracts for the organization."
+      - name: CREATED_DATE
+        description: "The date the organization was created."
+      - name: COUNT_TRANSACTIONS_LAST_30_DAYS
+        description: "The count of transactions in the last 30 days."
+      - name: COUNT_TRANSACTIONS_LAST_90_DAYS
+        description: "The count of transactions in the last 90 days."
+      - name: COUNT_TRANSACTIONS
+        description: "The total count of transactions."
+      - name: SUM_TRANSACTIONS_LAST_30_DAYS
+        description: "The sum of transactions in the last 30 days."
+      - name: SUM_TRANSACTIONS_LAST_90_DAYS
+        description: "The sum of transactions in the last 90 days."
+      - name: TOTAL_TRANSACTIONS
+        description: "The total sum of transactions."
+      - name: INVOICE_ID
+        description: "The invoice identifier."
+      - name: PARENT_INVOICE_ID
+        description: "The parent invoice identifier."
+      - name: TRANSACTION_ID
+        description: "The transaction identifier."
+      - name: TYPE
+        description: "The type of invoice."
+      - name: STATUS
+        description: "The status of the invoice."
+      - name: CURRENCY
+        description: "The currency of the invoice."
+      - name: PAYMENT_CURRENCY
+        description: "The payment currency."
+      - name: PAYMENT_METHOD
+        description: "The payment method used."
+      - name: AMOUNT
+        description: "The amount of the invoice."
+      - name: PAYMENT_AMOUNT
+        description: "The payment amount."
+      - name: FX_RATE
+        description: "The foreign exchange rate."
+      - name: FX_RATE_PAYMENT
+        description: "The foreign exchange rate for payment."
+      - name: CREATED_AT
+        description: "The timestamp when the invoice was created."
+      - name: VALUE_USD
+        description: "The value of the invoice in USD."
+      - name: _sequence
+        description: "The incremental sequence for tracking changes."
+      - name: _incremental_sequence
+        description: "The timestamp for incremental loading."

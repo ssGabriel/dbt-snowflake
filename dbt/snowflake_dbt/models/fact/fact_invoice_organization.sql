@@ -44,12 +44,12 @@ SELECT
     di._incremental_sequence AS _sequence,
     CURRENT_TIMESTAMP()      AS _incremental_sequence
 FROM
-    {{ ref('dim_date') }} dd
-LEFT JOIN 
     {{ ref('dim_invoices')}} di 
-        ON  dd.date_id = di.date_id
-LEFT JOIN {{ ref('dim_organizations') }} do
+    LEFT JOIN  {{ ref('dim_date')}} dd
+        ON  di.date_id = dd.date_id
+    LEFT JOIN {{ ref('dim_organizations') }} do
         ON  di.ORGANIZATION_ID = do.ORGANIZATION_ID
-WHERE 
-    STATUS = 'paid'
-GROUP BY ALL
+{% if is_incremental() %}
+    WHERE 
+        _sequence >= SELECT MAX(_incremental_sequence) FROM {{this}}
+{% endif %}
