@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: dim_invoices
+    description: |
+      This model transforms and enriches invoice data from the `RAW_PROD.INVOICES` source table.
+      It includes casting columns to appropriate data types and adding an incremental sequence.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: PROD.INVOICES
+    columns:
+      - name: INVOICE_ID
+        description: |
+          The unique identifier for the invoice, cast to a BIGINT data type.
+        tests:
+          - not_null
+          - unique          
+      - name: PARENT_INVOICE_ID
+        description: |
+          The identifier for the parent invoice, if applicable, cast to a BIGINT data type.
+      - name: TRANSACTION_ID
+        description: |
+          The identifier for the transaction associated with the invoice, cast to a BIGINT data type.
+      - name: ORGANIZATION_ID
+        description: |
+          The identifier for the organization associated with the invoice, cast to a BIGINT data type.
+      - name: TYPE
+        description: |
+          The type of invoice, cast to a BIGINT data type.
+      - name: STATUS
+        description: |
+          The current status of the invoice (e.g., paid, unpaid, pending).
+      - name: CURRENCY
+        description: |
+          The currency in which the invoice amount is denominated.
+      - name: PAYMENT_CURRENCY
+        description: |
+          The currency in which the payment was made.
+      - name: PAYMENT_METHOD
+        description: |
+          The method used for payment (e.g., credit card, bank transfer).
+      - name: AMOUNT
+        description: |
+          The total amount of the invoice, cast to a NUMBER data type.
+      - name: PAYMENT_AMOUNT
+        description: |
+          The amount paid for the invoice, cast to a NUMBER data type.
+      - name: FX_RATE
+        description: |
+          The foreign exchange rate used for the invoice, cast to a FLOAT data type.
+      - name: FX_RATE_PAYMENT
+        description: |
+          The foreign exchange rate used for the payment, cast to a FLOAT data type.
+      - name: CREATED_AT
+        description: |
+          The timestamp when the invoice was created, cast to a TIMESTAMP data type.
+      - name: DATE_ID
+        description: |
+          The date when the invoice was created, derived from `CREATED_AT` and cast to a DATE data type.          
+      - name: VALUE_USD
+        description: |
+          The calculated value of the invoice in USD, derived by multiplying `AMOUNT` by `FX_RATE`.
+      - name: _incremental_sequence
+        description: |
+          A timestamp column added to track the sequence of incremental updates.

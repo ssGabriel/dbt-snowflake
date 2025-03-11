@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "A table containing dates between 2019-04-01 and 2024-04-24, along with day of the week, quarter, and calendar information."
+    columns:
+      - name: date
+        description: "The date in YYYY-MM-DD format."
+        tests:
+          - not_null
+          - unique        
+      - name: day_of_week
+        description: "The day of the week as a number (1 = Sunday, 7 = Saturday)."
+      - name: day_name
+        description: "The name of the day (e.g., Monday, Tuesday)."
+      - name: quarter
+        description: "The quarter of the year (1 to 4)."
+      - name: month
+        description: "The month number (1 to 12)."
+      - name: year
+        description: "The year."
+      - name: quarter_end_date
+        description: "The last day of the quarter."
+      - name: month_end_date
+        description: "The last day of the month."

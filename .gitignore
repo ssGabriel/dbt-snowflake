@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+dbt/snowflake_dbt/.user.yml
+
+dbt-snowflake/logs/*

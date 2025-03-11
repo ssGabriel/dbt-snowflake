@@ -38,6 +38,15 @@ execution_config = ExecutionConfig(
     dbt_executable_path=DBT_PATH,
 )
 
+slack_report = SnowflakeToSlackOperator(
+    task_id="slack_report",
+    sql=SNOWFLAKE_SLACK_SQL,
+    slack_message=SNOWFLAKE_SLACK_MESSAGE,
+    snowflake_conn_id=SNOWFLAKE_CONN_ID,
+    slack_conn_id=SLACK_CONN_ID,
+    dag=dag,
+)
+
 dag = DAG(
     "snowflake_dbt",
     default_args=default_args,
@@ -58,4 +67,4 @@ dbt_running_models = DbtTaskGroup(
 
 end_dag = DummyOperator(task_id="end_dag", dag=dag)
 
-start_dag >> dbt_running_models >> end_dag
+start_dag >> dbt_running_models >> slack_report >>end_dag

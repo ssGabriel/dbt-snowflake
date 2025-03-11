@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_organizations
+    description: |
+      This model extracts and transforms key invoice-related data from the `RAW_PROD.INVOICES` source table.
+      It includes organization details, payment dates, and contract activity counts.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: PROD.ORGANIZATIONS
+    columns:
+      - name: ORGANIZATION_ID
+        description: |
+          The unique identifier for the organization, cast to a BIGINT data type.
+        tests:
+          - not_null
+          - unique
+      - name: FIRST_PAYMENT_DATE
+        description: |
+          The date of the first payment made by the organization.
+      - name: LAST_PAYMENT_DATE
+        description: |
+          The date of the most recent payment made by the organization.
+      - name: LEGAL_ENTITY_COUNTRY_CODE
+        description: |
+          The country code of the legal entity associated with the organization.
+      - name: COUNT_TOTAL_CONTRACTS_ACTIVE
+        description: |
+          The total number of active contracts associated with the organization.
+      - name: CREATED_DATE
+        description: |
+          The date when the invoice record was created.
