@@ -17,6 +17,8 @@ WITH  aux_amount AS (
         SUM(VALUE_USD)                                                                         AS TOTAL_TRANSACTIONS,
     FROM
         {{ref('dim_invoices')}} di
+    WHERE 
+        STATUS = 'paid'        
     GROUP BY 1
 )    
     
